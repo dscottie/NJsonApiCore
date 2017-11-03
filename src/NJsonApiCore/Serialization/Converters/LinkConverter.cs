@@ -1,27 +1,29 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NJsonApi.Infrastructure;
+using NJsonApi.Serialization.Representations;
 
 namespace NJsonApi.Serialization.Converters
 {
-    public class LinkDataConverter : JsonConverter
+    public class LinkConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(ILinkData);
+            return objectType == typeof(ILink);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JToken obj = JToken.Load(reader);
-
             switch (obj.Type)
             {
                 case JTokenType.Object:
-                    return obj.ToObject<LinkData>(serializer);
+                    return new LinkObject { Link = new SimpleLink(new Uri(obj.Value<string>("href"))) };
+                //return obj.ToObject<LinkObject>(serializer);
+                case JTokenType.String:
+                    return new LinkObject { Link = new SimpleLink(new Uri(obj.Value<string>())) };
                 default:
-                    throw new InvalidOperationException("When updating a resource 'links' needs to contain data which is an object.");
+                    throw new InvalidOperationException("When updating a resource, each link needs to contain data the is either a link object or string.");
             }
         }
 

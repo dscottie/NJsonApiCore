@@ -92,6 +92,7 @@
     <Compile Include="SerializationDirection.cs" />
     <Compile Include="Serialization\Converters\ConcreteConverters.cs" />
     <Compile Include="Serialization\Converters\ISerializationAware.cs" />
+    <Compile Include="Serialization\Converters\LinkConverter.cs" />
     <Compile Include="Serialization\Converters\LinkDataConverter.cs" />
     <Compile Include="Serialization\Converters\RelationshipDataConverter.cs" />
     <Compile Include="Serialization\Converters\SerializationAwareConverter.cs" />
