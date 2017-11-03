@@ -22,6 +22,8 @@ namespace NJsonApi
         {
             jsonSerializerSettings = new JsonSerializerSettings();
             jsonSerializerSettings.Converters.Add(new IsoDateTimeConverter());
+            jsonSerializerSettings.Converters.Add(new LinkDataConverter());
+            jsonSerializerSettings.Converters.Add(new LinkConverter());
             jsonSerializerSettings.Converters.Add(new RelationshipDataConverter());
             jsonSerializerSettings.Converters.Add(new StringEnumConverter() { CamelCaseText = true });
 #if DEBUG

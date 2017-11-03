@@ -21,6 +21,7 @@ namespace NJsonApi.Infrastructure
         public Dictionary<string, ICollectionDelta> CollectionDeltas { get; set; }
         public IMetaData TopLevelMetaData { get; set; }
         public IMetaData ObjectMetaData { get; set; }
+        public Dictionary<string, string> Links { get; set; }
         private bool _scanned;
 
         public Delta(IConfiguration configuration)

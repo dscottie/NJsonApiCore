@@ -306,7 +306,7 @@ namespace NJsonApi.Serialization
 
         private ILinkData GetObjectLinkData(object objectGraph)
         {
-            var linkContainer = (objectGraph as IObjectLinkContainer);
+            var linkContainer = (objectGraph as ISerializableObjectLinkContainer);
             var linkData = linkContainer?.GetLinks().Count > 0 ? linkContainer.GetLinks() : new LinkData();
             return linkData;
         }

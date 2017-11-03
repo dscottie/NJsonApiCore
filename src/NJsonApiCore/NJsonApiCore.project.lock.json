@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "targets": {
     ".NETFramework,Version=v4.5.2": {
       "Humanizer.Core/2.1.0": {
@@ -199,13 +199,13 @@
       ]
     },
     "Microsoft.Web.Infrastructure/1.0.0": {
-      "sha512": "FNmvLn5m2LTU/Rs2KWVo0SIIh9Ek+U0ojex7xeDaSHw/zgEP77A8vY5cVWgUtBGS8MJfDGNn8rpXJWEIQaPwTg==",
+      "sha512": "SqV0NRmUyobIKHoxWRAWCTReMAy0AX00gUCGxl222joKWwQgy1Ycr5c+uVffOfQl4zcHEGpR+ULRmZDesMGXcA==",
       "type": "package",
       "path": "microsoft.web.infrastructure/1.0.0",
       "files": [
-        "lib/net40/Microsoft.Web.Infrastructure.dll",
-        "microsoft.web.infrastructure.1.0.0.nupkg.sha512",
-        "microsoft.web.infrastructure.nuspec"
+        "Microsoft.Web.Infrastructure.1.0.0.nupkg.sha512",
+        "Microsoft.Web.Infrastructure.nuspec",
+        "lib/net40/Microsoft.Web.Infrastructure.dll"
       ]
     },
     "Newtonsoft.Json/9.0.1": {
@@ -242,7 +242,7 @@
     ".NETFramework,Version=v4.5.2": []
   },
   "packageFolders": {
-    "C:\\Users\\cezaryn\\.nuget\\packages\\": {}
+    "C:\\Users\\darrells\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -251,11 +251,22 @@
       "Rob"
     ],
     "restore": {
-      "projectUniqueName": "C:\\root\\git\\NJsonApiCore\\src\\NJsonApiCore\\NJsonApiCore.csproj",
+      "projectUniqueName": "C:\\git\\tl\\NJsonApiCore\\src\\NJsonApiCore\\NJsonApiCore.csproj",
       "projectName": "NJsonApiCore",
-      "projectPath": "C:\\root\\git\\NJsonApiCore\\src\\NJsonApiCore\\NJsonApiCore.csproj",
-      "projectJsonPath": "C:\\root\\git\\NJsonApiCore\\src\\NJsonApiCore\\NJsonApiCore.project.json",
-      "projectStyle": "ProjectJson"
+      "projectPath": "C:\\git\\tl\\NJsonApiCore\\src\\NJsonApiCore\\NJsonApiCore.csproj",
+      "projectJsonPath": "C:\\git\\tl\\NJsonApiCore\\src\\NJsonApiCore\\NJsonApiCore.project.json",
+      "packagesPath": "C:\\Users\\darrells\\.nuget\\packages\\",
+      "outputPath": "C:\\git\\tl\\NJsonApiCore\\src\\NJsonApiCore\\obj\\",
+      "projectStyle": "ProjectJson",
+      "configFilePaths": [
+        "C:\\Users\\darrells\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "http://get.nuget.ttldev": {},
+        "https://api.nuget.org/v3/index.json": {}
+      }
     },
     "dependencies": {
       "Humanizer.Core": "2.1.0",

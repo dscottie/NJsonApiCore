@@ -5,7 +5,7 @@ using System;
 
 namespace NJsonApi.Web.MVC5.HelloWorld.Models
 {
-    public class Article : IObjectMetaDataContainer, IObjectLinkContainer
+    public class Article : IObjectMetaDataContainer, ISerializableObjectLinkContainer
     {
         private ObjectMetaDataContainer _metaDataContainer = new ObjectMetaDataContainer();
         private ObjectLinkContainer _linkContainer = new ObjectLinkContainer();
