@@ -87,17 +87,17 @@ namespace NJsonApi
         public ILinkData GetLinks(object objectGraph, JsonSerializerSettings settings)
         {
             Dictionary<string, ILink> links;
-            if (settings.NullValueHandling == NullValueHandling.Ignore)
-            {
+//            if (settings.NullValueHandling == NullValueHandling.Ignore)
+//            {
                 links = LinkGetters
                     .Where(x => x.Value(objectGraph) != null)
                     .ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
-            }
-            else
-            {
-                links = LinkGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key),
-                    kvp => kvp.Value(objectGraph));
-            }
+//            }
+//            else
+//            {
+//                links = LinkGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key),
+//                    kvp => kvp.Value(objectGraph));
+//            }
 
             var linkData = new LinkData();
             foreach (var link in links)
