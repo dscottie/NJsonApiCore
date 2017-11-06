@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
+using NJsonApi.Serialization.Representations;
 
 namespace NJsonApi
 {
@@ -19,8 +20,8 @@ namespace NJsonApi
         Dictionary<string, Expression<Action<object, object>>> PropertySettersExpressions { get; }
 
 
-        Dictionary<string, Func<object, object>> LinkGetters { get; set; }
-        Dictionary<string, Action<object, object>> LinkSetters { get; }
+        Dictionary<string, Func<object, ILink>> LinkGetters { get; set; }
+        Dictionary<string, Action<object, ILink>> LinkSetters { get; }
         Dictionary<string, Expression<Action<object, object>>> LinkSettersExpressions { get; }
 
         bool ValidateIncludedRelationshipPaths(string[] includedPaths);
@@ -28,6 +29,6 @@ namespace NJsonApi
         Dictionary<string, object> GetAttributes(object objectGraph, JsonSerializerSettings settings);
 
         Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes);
-        Dictionary<string, object> GetValuesFromLinks(ILinkData links);
+        Dictionary<string, ILink> GetValuesFromLinks(ILinkData links);
     }
 }

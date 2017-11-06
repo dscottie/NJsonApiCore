@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using NJsonApi.Serialization.Representations;
 
 namespace NJsonApi.Infrastructure
 {
@@ -14,7 +15,7 @@ namespace NJsonApi.Infrastructure
     public interface IDelta
     {
         Dictionary<string, object> ObjectPropertyValues { get; set; }
-        Dictionary<string, object> ObjectLinkValues { get; set; }
+        Dictionary<string, ILink> ObjectLinkValues { get; set; }
         Dictionary<string, ICollectionDelta> CollectionDeltas { get; set; }
         IMetaData TopLevelMetaData { get; set; }
         IMetaData ObjectMetaData { get; set; }

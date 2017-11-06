@@ -44,7 +44,6 @@ namespace NJsonApi.Serialization.Representations
 
         public LinkObject(Uri href) : base(href)
         {
-            //this.Link = new SimpleLink(href);
         }
 
         public MetaData GetMetaData()
@@ -56,7 +55,6 @@ namespace NJsonApi.Serialization.Representations
         {
             if (_meta?.Any() ?? false)
             {
-                //writer.WriteRaw(JsonConvert.SerializeObject(this));
                 writer.WriteStartObject();
                 writer.WritePropertyName("href");
                 writer.WriteValue(Href);

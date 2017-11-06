@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using NJsonApi.Serialization.Representations;
 
 namespace NJsonApi
 {
@@ -233,7 +234,7 @@ namespace NJsonApi
 
             if (direction == SerializationDirection.Out || direction == SerializationDirection.Both)
             {
-                BuiltResourceMapping.LinkGetters[name] = propertyInfo.GetValue;
+                BuiltResourceMapping.LinkGetters[name] = o => propertyInfo.GetValue(o) as ILink;
             }
 
             if (direction == SerializationDirection.In || direction == SerializationDirection.Both)

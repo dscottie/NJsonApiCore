@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using NJsonApi.Serialization.Representations;
 
 namespace NJsonApi.Infrastructure
 {
@@ -14,11 +15,14 @@ namespace NJsonApi.Infrastructure
         private Dictionary<string, Action<object, object>> _currentTypeSetters;
         private Dictionary<string, Action<object, object>> _typeSettersTemplates;
 
+        private Dictionary<string, Action<object, ILink>> _currentLinkSetters;
+        private Dictionary<string, Action<object, ILink>> _linkSettersTemplates;
+
         private Dictionary<string, CollectionInfo<T>> _currentCollectionInfos;
         private Dictionary<string, CollectionInfo<T>> _collectionInfoTemplates;
 
         public Dictionary<string, object> ObjectPropertyValues { get; set; }
-        public Dictionary<string, object> ObjectLinkValues { get; set; }
+        public Dictionary<string, ILink> ObjectLinkValues { get; set; }
         public Dictionary<string, ICollectionDelta> CollectionDeltas { get; set; }
         public IMetaData TopLevelMetaData { get; set; }
         public IMetaData ObjectMetaData { get; set; }
@@ -29,7 +33,7 @@ namespace NJsonApi.Infrastructure
         {
             _mapping = configuration.GetMapping(typeof(T));
             ObjectPropertyValues = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            ObjectLinkValues = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            ObjectLinkValues = new Dictionary<string, ILink>(StringComparer.OrdinalIgnoreCase);
             CollectionDeltas = new Dictionary<string, ICollectionDelta>();
             TopLevelMetaData = null;
             ObjectMetaData = null; 
@@ -41,12 +45,17 @@ namespace NJsonApi.Infrastructure
             {
                 _typeSettersTemplates = ScanForProperties();
             }
+            if (_linkSettersTemplates == null)
+            {
+                _linkSettersTemplates = ScanForLinks();
+            }
             if (_collectionInfoTemplates == null)
             {
                 _collectionInfoTemplates = ScanForCollections();
             }
 
             _currentTypeSetters = _typeSettersTemplates.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            _currentLinkSetters = _linkSettersTemplates.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             _currentCollectionInfos = _collectionInfoTemplates.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             _scanned = true;
         }
@@ -117,7 +126,14 @@ namespace NJsonApi.Infrastructure
         public void ApplyLinks(T inputObject)
         {
             // TODO: DS - Implement
-            //throw new NotImplementedException();
+            ThrowExceptionIfNotScanned();
+            if (ObjectLinkValues == null) return;
+            foreach (var objectLinkNameValue in ObjectLinkValues)
+            {
+                _currentLinkSetters.TryGetValue(objectLinkNameValue.Key, out var setter);
+                if (setter != null)
+                    setter(inputObject, objectLinkNameValue.Value);
+            }
         }
 
         public ICollectionDelta<TElement> Collection<TElement>(Expression<Func<T, ICollection<TElement>>> collectionProperty)
@@ -153,21 +169,13 @@ namespace NJsonApi.Infrastructure
             return set1.Concat(set2).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
-        private Dictionary<string, Action<object, object>> ScanForLinks()
+        private Dictionary<string, Action<object, ILink>> ScanForLinks()
         {
             // set1 contains simple properties setters that are not related resources
-            var set1 = ObjectPropertyValues
-                .Where(opv => _mapping.PropertySetters.ContainsKey(opv.Key))
-                .ToDictionary(opv => opv.Key, opv => _mapping.PropertySetters[opv.Key]);
-            // set2 contains simple property setters for 1:1 related resources
-            var set2 = ObjectPropertyValues
-                .Join(
-                    _mapping.Relationships.Where(r => !r.IsCollection),
-                    opv => opv.Key,
-                    r => r.RelationshipName,
-                    (opv, r) => new KeyValuePair<string, Action<object, object>>(opv.Key, (Action<object, object>)r.RelatedProperty.SetterDelegate))
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-            return set1.Concat(set2).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            var links = ObjectLinkValues
+                .Where(opv => _mapping.LinkSetters.ContainsKey(opv.Key))
+                .ToDictionary(opv => opv.Key, opv => _mapping.LinkSetters[opv.Key]);
+            return links;
         }
 
         private Dictionary<string, CollectionInfo<T>> ScanForCollections()
