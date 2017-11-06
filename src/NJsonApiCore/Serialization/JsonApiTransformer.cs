@@ -87,7 +87,9 @@ namespace NJsonApi.Serialization
             }
 
             delta.ObjectPropertyValues = mapping.GetValuesFromAttributes(updateDocument.Data.Attributes);
-            delta.Links = updateDocument.Data.Links.ToDictionary(x => x.Key, x => (x.Value as ILinkObject)?.Link?.Href);
+            delta.ObjectLinkValues = mapping.GetValuesFromLinks(updateDocument.Data.Links);
+            //delta.Links = updateDocument.Data.Links.ToDictionary(x => x.Key, x => (x.Value as ILinkObject)?.Link?.Href);
+            delta.Links = updateDocument.Data.Links.ToDictionary(x => x.Key, x => (x.Value as ILinkObject)?.Href);
 
             if (updateDocument.Data.Relationships != null)
             {

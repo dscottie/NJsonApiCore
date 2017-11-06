@@ -18,6 +18,11 @@ namespace NJsonApi.Conventions
         bool IsLinkedResource(PropertyInfo pi);
 
         /// <summary>
+        /// Used to distinguish resource link properties
+        /// </summary>
+        bool IsLink(PropertyInfo pi);
+
+        /// <summary>
         /// Determines if the property should be ignored during scanning.
         /// </summary>
         bool ShouldIgnore(PropertyInfo pi);

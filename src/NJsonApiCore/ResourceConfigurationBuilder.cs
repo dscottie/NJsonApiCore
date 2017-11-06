@@ -77,9 +77,17 @@ namespace NJsonApi
                     PropertyInfo info = propertyInfo;
                     BuiltResourceMapping.IdSetter = CreateIdSetter(info);
                 }
-                else if (!PropertyScanningConvention.IsLinkedResource(propertyInfo) && !PropertyScanningConvention.ShouldIgnore(propertyInfo))
+                else if (!PropertyScanningConvention.IsLinkedResource(propertyInfo) &&
+                    !PropertyScanningConvention.ShouldIgnore(propertyInfo))
                 {
-                    AddProperty(propertyInfo);
+                    if (PropertyScanningConvention.IsLink(propertyInfo))
+                    {
+                        AddLink(propertyInfo);
+                    }
+                    else
+                    {
+                        AddProperty(propertyInfo);
+                    }
                 }
             }
             return this;
@@ -211,6 +219,44 @@ namespace NJsonApi
             if (direction == SerializationDirection.In || direction == SerializationDirection.Both)
             {
                 BuiltResourceMapping.PropertySettersExpressions[name] = expression;
+            }
+        }
+
+        private void AddLink(PropertyInfo propertyInfo, SerializationDirection direction = SerializationDirection.Both)
+        {
+            var name = CamelCaseUtil.ToCamelCase(propertyInfo.Name);
+            if (BuiltResourceMapping.LinkGetters.ContainsKey(name) ||
+                BuiltResourceMapping.LinkSetters.ContainsKey(name))
+            {
+                throw new InvalidOperationException(string.Format("Link {0} is already registered on type {1}.", name, typeof(TResource)));
+            }
+
+            if (direction == SerializationDirection.Out || direction == SerializationDirection.Both)
+            {
+                BuiltResourceMapping.LinkGetters[name] = propertyInfo.GetValue;
+            }
+
+            if (direction == SerializationDirection.In || direction == SerializationDirection.Both)
+            {
+                BuiltResourceMapping.LinkSetters[name] =
+                    !PropertyScanningConvention.IsLinkedResource(propertyInfo)
+                    && PropertyScanningConvention.IsLink(propertyInfo)
+                        ? propertyInfo.SetValue
+                        : (Action<object, object>)(Delegate)(propertyInfo.ToCompiledSetterAction<object, object>());
+            }
+
+            var instance = Expression.Parameter(typeof(object), "i");
+            var argument = Expression.Parameter(typeof(object), "a");
+            var setterCall = Expression.Call(
+                Expression.Convert(instance, propertyInfo.DeclaringType),
+                propertyInfo.GetSetMethod(),
+                Expression.Convert(argument, propertyInfo.PropertyType));
+
+            Expression<Action<object, object>> expression = Expression.Lambda<Action<object, object>>(setterCall, instance, argument);
+
+            if (direction == SerializationDirection.In || direction == SerializationDirection.Both)
+            {
+                BuiltResourceMapping.LinkSettersExpressions[name] = expression;
             }
         }
 

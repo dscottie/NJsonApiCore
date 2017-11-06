@@ -18,6 +18,9 @@ namespace NJsonApi
         public Dictionary<string, Func<object, object>> PropertyGetters { get; set; }
         public Dictionary<string, Action<object, object>> PropertySetters { get; private set; }
         public Dictionary<string, Expression<Action<object, object>>> PropertySettersExpressions { get; private set; }
+        public Dictionary<string, Func<object, object>> LinkGetters { get; set; }
+        public Dictionary<string, Action<object, object>> LinkSetters { get; private set; }
+        public Dictionary<string, Expression<Action<object, object>>> LinkSettersExpressions { get; private set; }
         public List<IRelationshipMapping> Relationships { get; set; }
         public Type Controller { get; set; }
         
@@ -28,6 +31,9 @@ namespace NJsonApi
             PropertyGetters = new Dictionary<string, Func<object, object>>();
             PropertySetters = new Dictionary<string, Action<object, object>>();
             PropertySettersExpressions = new Dictionary<string, Expression<Action<object, object>>>();
+            LinkGetters = new Dictionary<string, Func<object, object>>();
+            LinkSetters = new Dictionary<string, Action<object, object>>();
+            LinkSettersExpressions = new Dictionary<string, Expression<Action<object, object>>>();
             Relationships = new List<IRelationshipMapping>();
         }
 
@@ -38,6 +44,9 @@ namespace NJsonApi
             PropertyGetters = new Dictionary<string, Func<object, object>>();
             PropertySetters = new Dictionary<string, Action<object, object>>();
             PropertySettersExpressions = new Dictionary<string, Expression<Action<object, object>>>();
+            LinkGetters = new Dictionary<string, Func<object, object>>();
+            LinkSetters = new Dictionary<string, Action<object, object>>();
+            LinkSettersExpressions = new Dictionary<string, Expression<Action<object, object>>>();
             Relationships = new List<IRelationshipMapping>();
         }
 
@@ -79,16 +88,26 @@ namespace NJsonApi
         {
             var values = new Dictionary<string, object>();
 
+            // For each property setter that we found on the concrete resource class
             foreach (var propertySetter in PropertySettersExpressions)
             {
+                // Try to find a matching attribute on the provided document
                 object value;
                 attributes.TryGetValue(CamelCaseUtil.ToCamelCase(propertySetter.Key), out value);
                 if (value != null)
                 {
+                    // If we found one, then add to the new dictionary
                     values.Add(CamelCaseUtil.ToCamelCase(propertySetter.Key), value);
                 }
             }
 
+            return values;
+        }
+
+        public Dictionary<string, object> GetValuesFromLinks(ILinkData links)
+        {
+            // TODO: DS - Implement
+            var values = new Dictionary<string, object>();
             return values;
         }
     }

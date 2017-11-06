@@ -18,10 +18,12 @@ namespace NJsonApi.Serialization.Converters
             switch (obj.Type)
             {
                 case JTokenType.Object:
-                    return new LinkObject { Link = new SimpleLink(new Uri(obj.Value<string>("href"))) };
+                    //return new LinkObject { Link = new SimpleLink(new Uri(obj.Value<string>("href"))) };
+                    return new SimpleLink(new Uri(obj.Value<string>("href"))); // { Link = new SimpleLink(new Uri(obj.Value<string>("href"))) };
                 //return obj.ToObject<LinkObject>(serializer);
                 case JTokenType.String:
-                    return new LinkObject { Link = new SimpleLink(new Uri(obj.Value<string>())) };
+                    //return new LinkObject { Link = new SimpleLink(new Uri(obj.Value<string>())) };
+                    return new SimpleLink(new Uri(obj.Value<string>()));
                 default:
                     throw new InvalidOperationException("When updating a resource, each link needs to contain data the is either a link object or string.");
             }

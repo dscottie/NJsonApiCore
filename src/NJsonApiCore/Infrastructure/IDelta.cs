@@ -14,6 +14,7 @@ namespace NJsonApi.Infrastructure
     public interface IDelta
     {
         Dictionary<string, object> ObjectPropertyValues { get; set; }
+        Dictionary<string, object> ObjectLinkValues { get; set; }
         Dictionary<string, ICollectionDelta> CollectionDeltas { get; set; }
         IMetaData TopLevelMetaData { get; set; }
         IMetaData ObjectMetaData { get; set; }

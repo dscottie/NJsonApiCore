@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using NJsonApi.Serialization.Representations;
 
 namespace NJsonApi.Conventions.Impl
 {
@@ -26,8 +27,15 @@ namespace NJsonApi.Conventions.Impl
         public virtual bool IsLinkedResource(PropertyInfo pi)
         {
             var type = pi.PropertyType;
-            bool isPrimitiveType = type.GetTypeInfo().IsPrimitive || type.GetTypeInfo().IsValueType || (type == typeof(string) || (type == typeof(DateTime)) || (type == typeof(TimeSpan)) || (type == typeof(DateTimeOffset)));
+            bool isPrimitiveType = type.GetTypeInfo().IsPrimitive || type.GetTypeInfo().IsValueType || (type == typeof(string) || (type == typeof(DateTime)) || (type == typeof(TimeSpan)) || (type == typeof(DateTimeOffset))) || IsLink(pi);
             return !isPrimitiveType;
+        }
+
+        public virtual bool IsLink(PropertyInfo pi)
+        {
+            var type = pi.PropertyType;
+            var implementsILink = typeof(ILink).IsAssignableFrom(type);
+            return implementsILink;
         }
 
         /// <summary>

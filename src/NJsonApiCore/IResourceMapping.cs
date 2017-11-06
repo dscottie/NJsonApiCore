@@ -18,10 +18,16 @@ namespace NJsonApi
         Dictionary<string, Action<object, object>> PropertySetters { get; }
         Dictionary<string, Expression<Action<object, object>>> PropertySettersExpressions { get; }
 
+
+        Dictionary<string, Func<object, object>> LinkGetters { get; set; }
+        Dictionary<string, Action<object, object>> LinkSetters { get; }
+        Dictionary<string, Expression<Action<object, object>>> LinkSettersExpressions { get; }
+
         bool ValidateIncludedRelationshipPaths(string[] includedPaths);
 
         Dictionary<string, object> GetAttributes(object objectGraph, JsonSerializerSettings settings);
 
         Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes);
+        Dictionary<string, object> GetValuesFromLinks(ILinkData links);
     }
 }
