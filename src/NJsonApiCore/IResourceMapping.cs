@@ -27,6 +27,7 @@ namespace NJsonApi
         bool ValidateIncludedRelationshipPaths(string[] includedPaths);
 
         Dictionary<string, object> GetAttributes(object objectGraph, JsonSerializerSettings settings);
+        ILinkData GetLinks(object objectGraph, JsonSerializerSettings settings);
 
         Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes);
         Dictionary<string, ILink> GetValuesFromLinks(ILinkData links);

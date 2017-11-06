@@ -184,7 +184,7 @@ namespace NJsonApi.Serialization
             result.Id = resourceMapping.IdGetter(objectGraph).ToString();
             result.Type = resourceMapping.ResourceType;
             result.Attributes = resourceMapping.GetAttributes(objectGraph, configuration.GetJsonSerializerSettings());
-            result.Links = GetObjectLinkData(objectGraph);
+            result.Links = resourceMapping.GetLinks(objectGraph, configuration.GetJsonSerializerSettings()); //GetObjectLinkData(objectGraph);
             result.Links.Add("self", linkBuilder.FindResourceSelfLink(context, result.Id, resourceMapping));
             result.MetaData = GetObjectMetadata(objectGraph);
 

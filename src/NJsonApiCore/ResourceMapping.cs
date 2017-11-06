@@ -83,6 +83,30 @@ namespace NJsonApi
             }
         }
 
+        //public Dictionary<string, ILink> GetLinks(object objectGraph, JsonSerializerSettings settings)
+        public ILinkData GetLinks(object objectGraph, JsonSerializerSettings settings)
+        {
+            Dictionary<string, ILink> links;
+            if (settings.NullValueHandling == NullValueHandling.Ignore)
+            {
+                links = LinkGetters
+                    .Where(x => x.Value(objectGraph) != null)
+                    .ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
+            }
+            else
+            {
+                links = LinkGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key),
+                    kvp => kvp.Value(objectGraph));
+            }
+
+            var linkData = new LinkData();
+            foreach (var link in links)
+            {
+                linkData.Add(link.Key, link.Value);
+            }
+            return linkData;
+        }
+
         // TODO ROLA - type handling must be better in here
         public Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes)
         {
