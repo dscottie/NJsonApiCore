@@ -9,7 +9,7 @@ using System.Linq;
 namespace NJsonApi.Serialization.Representations
 {
     [JsonConverter(typeof(SerializationAwareConverter))]
-    public class SimpleLink : ISimpleLink, ISerializationAware
+    public class SimpleLink : ILink, ISerializationAware
     {
         public SimpleLink()
         {

@@ -7,14 +7,8 @@ namespace NJsonApi.Serialization.Representations
         string Href { get; set; }
     }
 
-    public interface ISimpleLink : ILink
-    {
-        //string Href { get; set; }
-    }
-
     public interface ILinkObject : ILink
     {
-        //ISimpleLink Link { get; set; }
         MetaData Meta { get; set; }
     }
 }
