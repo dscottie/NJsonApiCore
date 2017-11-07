@@ -15,8 +15,8 @@ namespace NJsonApi.Infrastructure
         private Dictionary<string, Action<object, object>> _currentTypeSetters;
         private Dictionary<string, Action<object, object>> _typeSettersTemplates;
 
-        private Dictionary<string, Action<object, ILink>> _currentLinkSetters;
-        private Dictionary<string, Action<object, ILink>> _linkSettersTemplates;
+        private Dictionary<string, Action<object, object>> _currentLinkSetters;
+        private Dictionary<string, Action<object, object>> _linkSettersTemplates;
 
         private Dictionary<string, CollectionInfo<T>> _currentCollectionInfos;
         private Dictionary<string, CollectionInfo<T>> _collectionInfoTemplates;
@@ -169,9 +169,8 @@ namespace NJsonApi.Infrastructure
             return set1.Concat(set2).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
-        private Dictionary<string, Action<object, ILink>> ScanForLinks()
+        private Dictionary<string, Action<object, object>> ScanForLinks()
         {
-            // set1 contains simple properties setters that are not related resources
             var links = ObjectLinkValues
                 .Where(opv => _mapping.LinkSetters.ContainsKey(opv.Key))
                 .ToDictionary(opv => opv.Key, opv => _mapping.LinkSetters[opv.Key]);

@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NJsonApi.Infrastructure;
 using NJsonApi.Serialization.Representations;
 
 namespace NJsonApi.Serialization.Converters
@@ -19,7 +20,7 @@ namespace NJsonApi.Serialization.Converters
             {
                 case JTokenType.Object:
                     //return new LinkObject { Link = new SimpleLink(new Uri(obj.Value<string>("href"))) };
-                    return new SimpleLink(new Uri(obj.Value<string>("href"))); // { Link = new SimpleLink(new Uri(obj.Value<string>("href"))) };
+                    return new LinkObject(new Uri(obj.Value<string>("href"))) { Meta = obj["meta"]?.ToObject<MetaData>() }; // { Link = new SimpleLink(new Uri(obj.Value<string>("href"))) };
                 //return obj.ToObject<LinkObject>(serializer);
                 case JTokenType.String:
                     //return new LinkObject { Link = new SimpleLink(new Uri(obj.Value<string>())) };

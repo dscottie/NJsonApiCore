@@ -234,7 +234,7 @@ namespace NJsonApi
 
             if (direction == SerializationDirection.Out || direction == SerializationDirection.Both)
             {
-                BuiltResourceMapping.LinkGetters[name] = o => propertyInfo.GetValue(o) as ILink;
+                BuiltResourceMapping.LinkGetters[name] = propertyInfo.GetValue;
             }
 
             if (direction == SerializationDirection.In || direction == SerializationDirection.Both)
